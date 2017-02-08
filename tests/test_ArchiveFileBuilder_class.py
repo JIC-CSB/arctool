@@ -1,30 +1,16 @@
-"""Tests for dtool.archive.ArchiveFileBuilder class."""
+"""Tests for arctool.archive.ArchiveFileBuilder class."""
 
 import os
 from distutils.dir_util import copy_tree
 import json
-import shutil
 import subprocess
-import tempfile
 
-import pytest
-
-HERE = os.path.dirname(__file__)
-TEST_INPUT_DATA = os.path.join(HERE, "data", "basic", "input")
-
-
-@pytest.fixture
-def tmp_dir(request):
-    d = tempfile.mkdtemp()
-
-    @request.addfinalizer
-    def teardown():
-        shutil.rmtree(d)
-    return d
+from . import tmp_dir_fixture  # NOQA
+from . import TEST_INPUT_DATA
 
 
 def test_archive_header_file_order():
-    from dtool.archive import ArchiveFileBuilder
+    from arctool.archive import ArchiveFileBuilder
     assert ArchiveFileBuilder.header_file_order == ('.dtool/dtool',
                                                     '.dtool/manifest.json',
                                                     'README.yml')
@@ -32,22 +18,22 @@ def test_archive_header_file_order():
 # Functional tests.
 
 
-def test_ArchiveFileBuilder_from_path(tmp_dir):
-    from dtool.archive import ArchiveDataSet, ArchiveFileBuilder
+def test_ArchiveFileBuilder_from_path(tmp_dir_fixture):  # NOQA
+    from arctool.archive import ArchiveDataSet, ArchiveFileBuilder
 
     archive_ds = ArchiveDataSet("my_archive")
-    archive_ds.persist_to_path(tmp_dir)
+    archive_ds.persist_to_path(tmp_dir_fixture)
 
-    archive_builder = ArchiveFileBuilder.from_path(tmp_dir)
+    archive_builder = ArchiveFileBuilder.from_path(tmp_dir_fixture)
     assert archive_ds == archive_builder._archive_dataset
 
 
-def test_create_archive(tmp_dir):
-    from dtool.archive import ArchiveDataSet, ArchiveFileBuilder
+def test_create_archive(tmp_dir_fixture):  # NOQA
+    from arctool.archive import ArchiveDataSet, ArchiveFileBuilder
 
     # Create separate directory for archive so that tarball
     # is created outside of it.
-    archive_directory_path = os.path.join(tmp_dir, "input")
+    archive_directory_path = os.path.join(tmp_dir_fixture, "input")
     os.mkdir(archive_directory_path)
 
     archive_ds = ArchiveDataSet("my_archive")
@@ -59,22 +45,22 @@ def test_create_archive(tmp_dir):
     copy_tree(archive_input_path, archive_output_path)
 
     archive_builder = ArchiveFileBuilder.from_path(archive_directory_path)
-    tar_path = archive_builder.persist_to_tar(tmp_dir)
+    tar_path = archive_builder.persist_to_tar(tmp_dir_fixture)
 
-    expected_tar_file_path = os.path.join(tmp_dir, "my_archive.tar")
+    expected_tar_file_path = os.path.join(tmp_dir_fixture, "my_archive.tar")
     assert expected_tar_file_path == archive_builder._tar_path
     assert expected_tar_file_path == tar_path
 
     assert os.path.isfile(expected_tar_file_path)
 
     # Move the original input data into a new directory.
-    reference_data_path = os.path.join(tmp_dir, "expected")
+    reference_data_path = os.path.join(tmp_dir_fixture, "expected")
     os.rename(archive_directory_path, reference_data_path)
     assert not os.path.isdir(archive_directory_path)
 
     # Untar the tarball just created.
     cmd = ["tar", "-xf", expected_tar_file_path]
-    subprocess.check_call(cmd, cwd=tmp_dir)
+    subprocess.check_call(cmd, cwd=tmp_dir_fixture)
 
     # Test that the archive has been re-instated by untaring.
     assert os.path.isdir(archive_directory_path)
