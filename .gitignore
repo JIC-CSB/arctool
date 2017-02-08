@@ -6,3 +6,5 @@
 .eggs
 
 env/
+.tox/
+.cache/
