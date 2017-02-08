@@ -14,12 +14,12 @@ from dtool import (
     DtoolTypeError,
     NotDtoolObject,
 )
-from dtool.arctool import (
+from arctool.utils import (
     README_SCHEMA,
     readme_yml_is_valid,
     new_archive_dataset,
 )
-from dtool.archive import (
+from arctool.archive import (
     ArchiveDataSet,
     ArchiveFile,
     ArchiveFileBuilder,
