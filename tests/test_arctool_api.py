@@ -36,7 +36,7 @@ def test_archive_fixture(tmp_archive):  # NOQA
 
 
 def test_new_archive_dataset(tmp_dir_fixture):  # NOQA
-    from dtool.arctool import new_archive_dataset
+    from arctool.utils import new_archive_dataset
 
     dataset, dataset_path, _ = new_archive_dataset(tmp_dir_fixture,
                                                    TEST_DESCRIPTIVE_METADATA)
@@ -83,11 +83,11 @@ def test_new_archive_dataset(tmp_dir_fixture):  # NOQA
 
 
 def test_readme_yml_is_valid(mocker):
-    from dtool.arctool import readme_yml_is_valid
+    from arctool.utils import readme_yml_is_valid
     # Not that the log function get imported into the dtool.arctool namespace
-    from dtool.arctool import log  # NOQA
+    from arctool.utils import log  # NOQA
 
-    patched_log = mocker.patch("dtool.arctool.log")
+    patched_log = mocker.patch("arctool.utils.log")
 
     assert not readme_yml_is_valid("")
     patched_log.assert_called_with("README.yml invalid: empty file")
@@ -172,7 +172,7 @@ archive_date: 2016-01-12
 
 def test_new_archive_dataset_input_descriptive_metadata(tmp_dir_fixture):  # NOQA
     from dtool import DescriptiveMetadata
-    from dtool.arctool import new_archive_dataset
+    from arctool.utils import new_archive_dataset
 
     metadata = DescriptiveMetadata([("project_name", "some_project"),
                                     ("dataset_name", "data_set_1")])
@@ -192,7 +192,7 @@ def test_new_archive_dataset_input_descriptive_metadata(tmp_dir_fixture):  # NOQ
 
 
 def test_create_archive(tmp_dir_fixture):  # NOQA
-    from dtool.arctool import new_archive_dataset
+    from arctool.utils import new_archive_dataset
 
     dataset, path, readme_path = new_archive_dataset(
         tmp_dir_fixture, TEST_DESCRIPTIVE_METADATA)

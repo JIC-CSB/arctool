@@ -17,7 +17,7 @@ TEST_OUTPUT_DATA = os.path.join(HERE, "data", "basic", "output")
 def test_full_archiving_workflow(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
-    from dtool.arctool.cli import dataset
+    from arctool.cli import dataset
 
     runner = CliRunner()
 
@@ -72,7 +72,7 @@ def test_full_archiving_workflow(chdir_fixture):  # NOQA
 def test_new(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
-    from dtool.arctool.cli import new
+    from arctool.cli import new
     from dtool import DataSet
 
     runner = CliRunner()
@@ -116,7 +116,7 @@ def test_new(chdir_fixture):  # NOQA
 def test_new_dataset(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
-    from dtool.arctool.cli import dataset
+    from arctool.cli import dataset
 
     runner = CliRunner()
 
@@ -142,7 +142,7 @@ def test_new_dataset(chdir_fixture):  # NOQA
 def test_new_project(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
-    from dtool.arctool.cli import project
+    from arctool.cli import project
 
     runner = CliRunner()
 
@@ -164,7 +164,7 @@ def test_new_project(chdir_fixture):  # NOQA
 def test_create_new_datasets_within_existing_project(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
-    from dtool.arctool.cli import new
+    from arctool.cli import new
 
     runner = CliRunner()
 
