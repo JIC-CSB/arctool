@@ -15,4 +15,10 @@ setup(name="arctool",
       url=url,
       install_requires=["dtool"],
       download_url="{}/tarball/{}".format(url, version),
+      install_requires=["click",
+                        "pyyaml",
+      ],
+      entry_points={
+          'console_scripts': ['arctool=dtool.arctool.cli:cli',]
+      },
       license="MIT")
