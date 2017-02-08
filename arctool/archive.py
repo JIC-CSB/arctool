@@ -47,7 +47,7 @@ class ArchiveFileBuilder(_ArchiveFileBase):
 
     @classmethod
     def from_path(cls, path):
-        """Return :class:`dtool.archive.ArchiveFileBuilder`.
+        """Return :class:`arctool.archive.ArchiveFileBuilder`.
 
         Parsed from a archive dataset directory."""
         archive_builder = cls()
