@@ -13,5 +13,6 @@ setup(name="arctool",
       author="Tjelvar Olsson",
       author_email="tjelvar.olsson@jic.ac.uk",
       url=url,
+      install_requires=["dtool"],
       download_url="{}/tarball/{}".format(url, version),
       license="MIT")
