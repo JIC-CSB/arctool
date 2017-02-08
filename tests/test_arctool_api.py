@@ -2,31 +2,18 @@
 
 import os
 import json
-import contextlib
-import shutil
-import tempfile
 from distutils.dir_util import copy_tree
 import tarfile
 
 import yaml
 import magic
-import pytest
 
-from dtool import DescriptiveMetadata
-from dtool.archive import ArchiveFileBuilder
+from arctool.archive import ArchiveFileBuilder
 
-HERE = os.path.dirname(__file__)
-TEST_INPUT_DATA = os.path.join(HERE, "data", "basic", "input")
-TEST_DESCRIPTIVE_METADATA = DescriptiveMetadata([
-        ("project_name", u"my_project"),
-        ("dataset_name", u"brassica_rnaseq_reads"),
-        ("confidential", False),
-        ("personally_identifiable_information", False),
-        ("owner_name", u"Your Name"),
-        ("owner_email", u"your.email@example.com"),
-        ("unix_username", u"namey"),
-        ("archive_date", u"2017-01-01"),
-    ])
+from . import TEST_INPUT_DATA
+from . import TEST_DESCRIPTIVE_METADATA
+from . import tmp_dir_fixture  # NOQA
+from . import tmp_archive  # NOQA
 
 
 def create_archive(path):
@@ -41,83 +28,20 @@ def create_archive(path):
     return archive_builder.persist_to_tar(output_path)
 
 
-@pytest.fixture
-def chdir(request):
-    d = tempfile.mkdtemp()
-
-    cwd = os.getcwd()
-    os.chdir(d)
-
-    @request.addfinalizer
-    def teardown():
-        os.chdir(cwd)
-        shutil.rmtree(d)
-
-
-@contextlib.contextmanager
-def remember_cwd():
-    cwd = os.getcwd()
-    try:
-        yield
-    finally:
-        os.chdir(cwd)
-
-
-@pytest.fixture
-def tmp_dir(request):
-    d = tempfile.mkdtemp()
-
-    @request.addfinalizer
-    def teardown():
-        shutil.rmtree(d)
-    return d
-
-
-@pytest.fixture
-def tmp_archive(request):
-
-    from dtool.arctool import new_archive_dataset
-    from dtool.archive import compress_archive
-
-    d = tempfile.mkdtemp()
-
-    @request.addfinalizer
-    def teardown():
-        shutil.rmtree(d)
-
-    dataset, path, readme_path = new_archive_dataset(
-        d, TEST_DESCRIPTIVE_METADATA)
-    tmp_project = os.path.join(d, "brassica_rnaseq_reads")
-    archive_input_path = os.path.join(TEST_INPUT_DATA, 'archive')
-    archive_output_path = os.path.join(tmp_project, 'archive')
-    copy_tree(archive_input_path, archive_output_path)
-
-    dataset.update_manifest()
-
-    create_archive(tmp_project)
-    compress_archive(tmp_project + '.tar')
-
-    archive_name = tmp_project + '.tar' + '.gz'
-
-    shutil.rmtree(archive_output_path)
-
-    return archive_name
-
-
-def test_archive_fixture(tmp_archive):
+def test_archive_fixture(tmp_archive):  # NOQA
 
     mimetype = magic.from_file(tmp_archive, mime=True)
 
     assert mimetype == 'application/x-gzip'
 
 
-def test_new_archive_dataset(tmp_dir):
+def test_new_archive_dataset(tmp_dir_fixture):  # NOQA
     from dtool.arctool import new_archive_dataset
 
-    dataset, dataset_path, _ = new_archive_dataset(tmp_dir,
+    dataset, dataset_path, _ = new_archive_dataset(tmp_dir_fixture,
                                                    TEST_DESCRIPTIVE_METADATA)
 
-    expected_path = os.path.join(tmp_dir,
+    expected_path = os.path.join(tmp_dir_fixture,
                                  "brassica_rnaseq_reads")
     expected_path = os.path.abspath(expected_path)
     assert dataset_path == expected_path
@@ -126,12 +50,12 @@ def test_new_archive_dataset(tmp_dir):
     expected_dataset_file = os.path.join(dataset_path, ".dtool", "dtool")
     assert os.path.isfile(expected_dataset_file)
 
-    readme_yml_path = os.path.join(tmp_dir,
+    readme_yml_path = os.path.join(tmp_dir_fixture,
                                    "brassica_rnaseq_reads",
                                    "README.yml")
     assert os.path.isfile(readme_yml_path)
 
-    readme_txt_path = os.path.join(tmp_dir,
+    readme_txt_path = os.path.join(tmp_dir_fixture,
                                    "brassica_rnaseq_reads",
                                    "archive",
                                    "README.txt")
@@ -246,16 +170,16 @@ archive_date: 2016-01-12
         "README.yml invalid: owner is missing an email")
 
 
-def test_new_archive_dataset_input_descriptive_metadata(tmp_dir):
+def test_new_archive_dataset_input_descriptive_metadata(tmp_dir_fixture):  # NOQA
     from dtool import DescriptiveMetadata
     from dtool.arctool import new_archive_dataset
 
     metadata = DescriptiveMetadata([("project_name", "some_project"),
                                     ("dataset_name", "data_set_1")])
-    new_archive_dataset(tmp_dir, metadata)
+    new_archive_dataset(tmp_dir_fixture, metadata)
 
     # Test file creation.
-    readme_yml_path = os.path.join(tmp_dir,
+    readme_yml_path = os.path.join(tmp_dir_fixture,
                                    "data_set_1",
                                    "README.yml")
     assert os.path.isfile(readme_yml_path)
@@ -267,12 +191,12 @@ def test_new_archive_dataset_input_descriptive_metadata(tmp_dir):
     assert readme_data["dataset_name"] == "data_set_1"
 
 
-def test_create_archive(tmp_dir):
+def test_create_archive(tmp_dir_fixture):  # NOQA
     from dtool.arctool import new_archive_dataset
 
     dataset, path, readme_path = new_archive_dataset(
-        tmp_dir, TEST_DESCRIPTIVE_METADATA)
-    tmp_project = os.path.join(tmp_dir, "brassica_rnaseq_reads")
+        tmp_dir_fixture, TEST_DESCRIPTIVE_METADATA)
+    tmp_project = os.path.join(tmp_dir_fixture, "brassica_rnaseq_reads")
     archive_input_path = os.path.join(TEST_INPUT_DATA, 'archive')
     archive_output_path = os.path.join(tmp_project, 'archive')
     copy_tree(archive_input_path, archive_output_path)
@@ -281,7 +205,8 @@ def test_create_archive(tmp_dir):
 
     create_archive(tmp_project)
 
-    expected_tar_filename = os.path.join(tmp_dir, 'brassica_rnaseq_reads.tar')
+    expected_tar_filename = os.path.join(
+        tmp_dir_fixture, 'brassica_rnaseq_reads.tar')
     assert os.path.isfile(expected_tar_filename)
 
     # Test that all expected files are present in archive

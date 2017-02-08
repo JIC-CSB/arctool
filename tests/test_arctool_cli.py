@@ -2,52 +2,19 @@
 
 import os
 import json
-import tempfile
 import shutil
 import subprocess
-import contextlib
 from distutils.dir_util import copy_tree
 
-import pytest
+from . import remember_cwd
+from . import chdir_fixture  # NOQA
 
 HERE = os.path.dirname(__file__)
 TEST_INPUT_DATA = os.path.join(HERE, "data", "basic", "input")
 TEST_OUTPUT_DATA = os.path.join(HERE, "data", "basic", "output")
 
 
-@contextlib.contextmanager
-def remember_cwd():
-    cwd = os.getcwd()
-    try:
-        yield
-    finally:
-        os.chdir(cwd)
-
-
-@pytest.fixture
-def chdir(request):
-    d = tempfile.mkdtemp()
-
-    cwd = os.getcwd()
-    os.chdir(d)
-
-    @request.addfinalizer
-    def teardown():
-        os.chdir(cwd)
-        shutil.rmtree(d)
-
-
-@pytest.fixture
-def tmp_dir(request):
-    d = tempfile.mkdtemp()
-
-    @request.addfinalizer
-    def teardown():
-        shutil.rmtree(d)
-    return d
-
-
-def test_full_archiving_workflow(chdir):
+def test_full_archiving_workflow(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
     from dtool.arctool.cli import dataset
@@ -102,7 +69,7 @@ def test_full_archiving_workflow(chdir):
     subprocess.call(cmd)
 
 
-def test_new(chdir):
+def test_new(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
     from dtool.arctool.cli import new
@@ -146,7 +113,7 @@ def test_new(chdir):
     # assert dataset.descriptive_metadata['project_name'] == 'my_test_project'
 
 
-def test_new_dataset(chdir):
+def test_new_dataset(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
     from dtool.arctool.cli import dataset
@@ -172,7 +139,7 @@ def test_new_dataset(chdir):
     assert os.path.isfile('my_dataset/.dtool/manifest.json')
 
 
-def test_new_project(chdir):
+def test_new_project(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
     from dtool.arctool.cli import project
@@ -194,7 +161,7 @@ def test_new_project(chdir):
     assert os.path.isfile('my_test_project/README.yml')
 
 
-def test_create_new_datasets_within_existing_project(chdir):
+def test_create_new_datasets_within_existing_project(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
     from dtool.arctool.cli import new

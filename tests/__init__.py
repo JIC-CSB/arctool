@@ -4,11 +4,34 @@ import os
 import shutil
 import tempfile
 from distutils.dir_util import copy_tree
+import contextlib
 
 import pytest
 
+from dtool import DescriptiveMetadata
+
 _HERE = os.path.dirname(__file__)
 TEST_INPUT_DATA = os.path.join(_HERE, "data", "basic", "input")
+
+TEST_DESCRIPTIVE_METADATA = DescriptiveMetadata([
+    ("project_name", u"my_project"),
+    ("dataset_name", u"brassica_rnaseq_reads"),
+    ("confidential", False),
+    ("personally_identifiable_information", False),
+    ("owner_name", u"Your Name"),
+    ("owner_email", u"your.email@example.com"),
+    ("unix_username", u"namey"),
+    ("archive_date", u"2017-01-01"),
+])
+
+
+@contextlib.contextmanager
+def remember_cwd():
+    cwd = os.getcwd()
+    try:
+        yield
+    finally:
+        os.chdir(cwd)
 
 
 @pytest.fixture
