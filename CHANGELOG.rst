@@ -15,6 +15,7 @@ Changed
 ^^^^^^^
 
 
+
 Deprecated
 ^^^^^^^^^^
 
@@ -29,6 +30,15 @@ Fixed
 
 Security
 ^^^^^^^^
+
+
+[0.12.0] - 2017-02-09
+---------------------
+
+Added
+^^^^^
+
+- ``arctool.slurm`` module moved across from ``dtool`` package
 
 
 
