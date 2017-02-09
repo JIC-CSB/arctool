@@ -1,7 +1,5 @@
 """Module for generating slurm scripts."""
 
-import os
-
 from arctool import JINJA2_ENV
 
 
