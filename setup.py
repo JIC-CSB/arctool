@@ -20,6 +20,6 @@ setup(name="arctool",
           "pyyaml",
       ],
       entry_points={
-          'console_scripts': ['arctool=dtool.arctool.cli:cli']
+          'console_scripts': ['arctool=arctool.cli:cli']
       },
       license="MIT")
