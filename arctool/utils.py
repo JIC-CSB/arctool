@@ -11,6 +11,7 @@ from dtool import (
 )
 from dtool.utils import write_templated_file
 
+
 HERE = os.path.dirname(__file__)
 TEMPLATE_DIR = os.path.join(HERE, '..', 'templates')
 README_SCHEMA = [
