@@ -15,7 +15,7 @@ setup(name="arctool",
       url=url,
       download_url="{}/tarball/{}".format(url, version),
       install_requires=[
-          "dtool",
+          "dtool==0.11.0",
           "click",
           "pyyaml",
       ],
