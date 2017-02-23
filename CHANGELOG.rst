@@ -31,13 +31,24 @@ Fixed
 Security
 ^^^^^^^^
 
+
+[0.13.0] - 2017-02-23
+---------------------
+
+Changed
+^^^^^^^
+
+- Made to work with dtool version >= 0.12.1
+
+
+
 [0.12.1] - 2017-02-23
 ---------------------
 
 Added
 ^^^^^
 
-- Stringent constrain on dtool version
+- Stringent constrain on dtool version == 0.11.0
 
 
 
