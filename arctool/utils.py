@@ -6,7 +6,6 @@ import datetime
 import yaml
 
 from dtool import (
-    log,
     DataSet,
 )
 from dtool.utils import write_templated_file
@@ -24,6 +23,10 @@ README_SCHEMA = [
     ("owner_username", u"namey"),
     ("date", u"today"),
 ]
+
+
+def log(message):
+    print(message)
 
 
 def new_archive_dataset(staging_path, descriptive_metadata):

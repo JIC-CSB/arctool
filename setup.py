@@ -15,8 +15,9 @@ setup(name="arctool",
       url=url,
       download_url="{}/tarball/{}".format(url, version),
       install_requires=[
-          "dtool==0.11.0",
+          "dtool>=0.12.1",
           "click",
+          "fluent-logger",
           "pyyaml",
       ],
       entry_points={

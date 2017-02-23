@@ -25,7 +25,7 @@ from arctool.archive import (
     ArchiveFileBuilder,
     compress_archive,
 )
-from dtool.slurm import generate_slurm_script
+from arctool.slurm import generate_slurm_script
 from dtool.clickutils import create_project, generate_descriptive_metadata
 
 from fluent import sender
