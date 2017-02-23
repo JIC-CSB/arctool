@@ -82,11 +82,6 @@ def test_create_archive(tmp_dir_fixture):  # NOQA
         expected_filename = os.path.join('input', filename)
         assert split_output[n].decode("utf-8") == expected_filename
 
-    from dtool import generate_relative_paths
-    untarred_file_set = set(generate_relative_paths(archive_directory_path))
-    reference_file_set = set(generate_relative_paths(reference_data_path))
-    assert untarred_file_set == reference_file_set
-
     # Test correctness of manifest
 
     manifest_path = os.path.join(

@@ -84,8 +84,6 @@ def test_new_archive_dataset(tmp_dir_fixture):  # NOQA
 
 def test_readme_yml_is_valid(mocker):
     from arctool.utils import readme_yml_is_valid
-    # Not that the log function get imported into the dtool.arctool namespace
-    from arctool.utils import log  # NOQA
 
     patched_log = mocker.patch("arctool.utils.log")
 

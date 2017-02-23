@@ -17,6 +17,7 @@ setup(name="arctool",
       install_requires=[
           "dtool",
           "click",
+          "fluent-logger",
           "pyyaml",
       ],
       entry_points={
