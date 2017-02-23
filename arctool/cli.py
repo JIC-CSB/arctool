@@ -8,12 +8,12 @@ import getpass
 import click
 
 from dtool import (
-    __version__,
     DataSet,
     Project,
     DtoolTypeError,
     NotDtoolObject,
 )
+from arctool import __version__
 from arctool.utils import (
     README_SCHEMA,
     readme_yml_is_valid,

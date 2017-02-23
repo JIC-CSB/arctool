@@ -14,6 +14,14 @@ TEST_INPUT_DATA = os.path.join(HERE, "data", "basic", "input")
 TEST_OUTPUT_DATA = os.path.join(HERE, "data", "basic", "output")
 
 
+def test_cli_version():
+    from arctool.cli import __version__
+
+    from arctool import __version__ as true_version
+
+    assert __version__ == true_version
+
+
 def test_full_archiving_workflow(chdir_fixture):  # NOQA
 
     from click.testing import CliRunner
