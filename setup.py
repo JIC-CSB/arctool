@@ -1,7 +1,7 @@
 from setuptools import setup
 
 url = "https://github.com/JIC-CSB/arctool"
-version = "0.13.1"
+version = "0.13.2"
 readme = open('README.rst').read()
 
 setup(name="arctool",

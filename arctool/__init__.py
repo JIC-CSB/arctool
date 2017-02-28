@@ -1,6 +1,6 @@
 """arctool package."""
 
-__version__ = "0.13.1"
+__version__ = "0.13.2"
 
 from jinja2 import ChoiceLoader, PackageLoader
 
